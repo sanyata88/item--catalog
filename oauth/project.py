@@ -172,7 +172,7 @@ def gconnect():
         return response
 
     # Store the access token in the session for later use.
-    login_session['access_token'] = credentials.access_token
+    login_session['credentials'] = credentials.access_token
     login_session['gplus_id'] = gplus_id
 
     # Get user info
@@ -424,8 +424,8 @@ def disconnect():
     if 'provider' in login_session:
         if login_session['provider'] == 'google':
             gdisconnect()
-            del login_session['gplus_id']
-            del login_session['credentials']
+            #del login_session['gplus_id']
+            #del login_session['credentials']
         if login_session['provider'] == 'facebook':
             fbdisconnect()
             del login_session['facebook_id']
@@ -440,6 +440,10 @@ def disconnect():
         flash("You were not logged in")
         return redirect(url_for('showRestaurants'))
 
+@app.route('/clearSession')
+def clearSession():
+    login_session.clear()
+    return "Session cleared"
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
